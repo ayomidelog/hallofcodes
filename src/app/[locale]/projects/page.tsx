@@ -15,22 +15,20 @@ export default function Projects() {
   const displayProjects = projects.slice(0, 6);
 
   return (
-    <main className="min-h-screen bg-gray-950 text-white">
-      {/* Hero Section */}
-      <section className="relative mx-auto max-w-5xl px-6 pt-24 pb-12 text-center">
-        <h1 className="text-4xl font-extrabold tracking-tight md:text-6xl">
-          Projects with a{" "}
-          <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-            Pulse
-          </span>
-        </h1>
-        <p className="mx-auto mt-4 max-w-2xl text-base text-gray-400 md:text-lg">
-          Tools, experiments, and community infrastructure built through practical
-          collaboration rather than handoffs.
-        </p>
+    <main className="bg-gray-950 text-white">
+      <section className="relative min-h-screen overflow-hidden">
+        <div className="relative mx-auto flex min-h-screen max-w-screen-xl flex-col items-start justify-center gap-8 px-6 py-16">
+          <h1 className="text-4xl font-bold leading-tight md:text-6xl">
+            Projects Built
+            <span className="block">By our devs.</span>
+          </h1>
+          <p className="max-w-2xl text-base text-gray-300 md:text-lg">
+            Tools, experiments, and community infrastructure built through
+            practical collaboration rather than handoffs.
+          </p>
+        </div>
       </section>
 
-      {/* Timeline Section */}
       <section className="relative mx-auto max-w-5xl px-6 pb-28">
         <div className="relative">
           {/* Vertical spine line */}
@@ -55,7 +53,7 @@ export default function Projects() {
                   <div className="hidden w-5/12 md:block" />
 
                   {/* Timeline Card */}
-                  <div className="ml-10 w-full md:ml-0 md:w-5/12">
+                  <div className="ml-10 w-full md:ml-0 md:w-6/13">
                     <TimelineCard project={project} />
                   </div>
                 </div>

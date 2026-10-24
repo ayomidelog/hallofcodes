@@ -52,7 +52,7 @@ export default async function Members() {
         <div className="relative mx-auto flex min-h-screen max-w-screen-xl flex-col items-start justify-center gap-8 px-6 py-16">
           <h1 className="text-4xl font-bold leading-tight md:text-6xl">
             The people behind the build
-            <span className="block text-blue-400">Meet the community.</span>
+            <span className="block">Meet the community.</span>
           </h1>
           <p className="max-w-2xl text-base text-gray-300 md:text-lg">
             We’re a diverse, high-impact group of builders, mentors, and
@@ -73,25 +73,6 @@ export default async function Members() {
               Become a Contributor
             </Link>
           </div>
-
-          <div className="mt-8 grid w-full grid-cols-2 gap-4 text-sm text-gray-300 md:grid-cols-4">
-            {[
-              { label: "Members", value: `${memberCount}+` },
-              { label: "Active", value: "5+" },
-              { label: "Mentors", value: "6+" },
-              { label: "Countries", value: "18" },
-            ].map((item) => (
-              <div
-                key={item.label}
-                className="rounded-xl border border-gray-800 bg-gray-900/50 p-4"
-              >
-                <div className="text-lg font-semibold text-white">
-                  {item.value}
-                </div>
-                <div className="text-gray-400">{item.label}</div>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -102,26 +83,21 @@ export default async function Members() {
         }}
       >
         <div className="mx-auto max-w-7xl px-6 py-20 md:py-28">
-          <div className="flex flex-col justify-between gap-6 border-b border-white/10 pb-8 md:flex-row md:items-end">
-            <div>
-              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.3em] text-amber-300">
-                Community
-              </p>
-              <ScrambleText
-                as="h2"
-                text="Our members are the power source."
-                durationMs={2000}
-                className="text-4xl font-semibold text-white md:text-5xl"
-                aria-label="Some of our members"
-              />
-            </div>
-            <p className="max-w-lg leading-7 text-gray-400">
+          <div>
+            <ScrambleText
+              as="h2"
+              text="Our members are the power source."
+              durationMs={2000}
+              className="max-w-xl text-4xl font-semibold leading-tight text-white md:text-5xl"
+              aria-label="Some of our members"
+            />
+            <p className="mt-6 max-w-xl text-base leading-8 text-gray-300 md:text-lg">
               Designers, developers, and tech leaders collaborating across
               projects, learning streams, and open-source initiatives.
             </p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
+          <div className="mt-5 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
             {members.map((member: Member, index: number) => (
               <Link
                 key={member.login}

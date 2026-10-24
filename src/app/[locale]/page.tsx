@@ -5,6 +5,7 @@ import { getMembers, Member } from "@/lib/github/members";
 import { getRepositories } from "@/lib/github/repositories";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faArrowDown,
   faArrowRight,
   faCode,
   faPerson,
@@ -78,20 +79,18 @@ export default async function Home() {
           <div className="absolute inset-0 bg-[#090d16]/70" />
 
           <div className="relative mx-auto flex min-h-screen max-w-7xl flex-col justify-center px-6 py-20 md:py-28">
-            <div className="max-w-4xl">
+            <div className="flex max-w-4xl flex-col items-center justify-center text-center md:items-start md:text-left">
               <h1 className="mt-8 text-4xl font-bold leading-tight md:text-6xl lg:text-7xl">
                 Hall of Codes
-                <span className="block text-blue-400">Build together.</span>
+                <span className="block">Build together.</span>
               </h1>
 
               <p className="mt-6 max-w-2xl text-base leading-7 text-gray-300 md:text-lg md:leading-8">
-                We are an open-source community built on collaboration,
-                learning, and shared progress. We bring developers together to
-                build meaningful projects, support one another, and keep the
-                spirit of open source alive.
+                We bring developers together to build meaningful projects,
+                support one another, and keep the spirit of open source alive.
               </p>
 
-              <div className="mt-8 flex flex-wrap gap-4">
+              <div className="mt-8 flex flex-wrap justify-center gap-4 md:justify-start">
                 <Link
                   href="/members"
                   className="rounded-xl bg-blue-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/20 transition hover:bg-blue-400"
@@ -111,6 +110,11 @@ export default async function Home() {
             <div className="mt-16 w-full">
               <MemberGlobe members={members} />
             </div>
+          </div>
+
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-gray-400 animate-bounce">
+            <span className="text-sm tracking-wide">Scroll to explore</span>
+            <FontAwesomeIcon icon={faArrowDown} className="w-5 h-5" />
           </div>
         </section>
 
@@ -212,7 +216,7 @@ export default async function Home() {
               "linear-gradient(180deg, #172033 0%, #101827 50%, #0d1420 100%)",
           }}
         >
-          <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
+          <div className="mx-auto max-w-7xl px-6 py-20 md:py-28">
             <HallOfFame members={getLeaderboards} />
           </div>
         </section>
@@ -224,23 +228,21 @@ export default async function Home() {
           }}
         >
           <div className="mx-auto max-w-7xl px-6 py-20 md:py-28">
-            <div className="flex flex-col justify-between gap-6 border-b border-white/10 pb-8 md:flex-row md:items-end">
-              <div>
-                <ScrambleText
-                  as="h2"
-                  text="Meet the builders"
-                  durationMs={2000}
-                  className="text-4xl font-semibold text-white md:text-5xl"
-                  aria-label="Some of our members"
-                />
-              </div>
-              <p className="max-w-lg leading-7 text-gray-400">
+            <div>
+              <ScrambleText
+                as="h2"
+                text="Meet the builders"
+                durationMs={2000}
+                className="max-w-xl text-4xl font-semibold leading-tight text-white md:text-5xl"
+                aria-label="Some of our members"
+              />
+              <p className="mt-6 max-w-xl text-base leading-8 text-gray-300 md:text-lg">
                 Different backgrounds, stacks, and time zones. One shared habit:
                 helping useful work move forward.
               </p>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
+            <div className="mt-5 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
               {members.slice(0, 12).map((member: Member, index: number) => (
                 <Link
                   key={member.login}
@@ -300,7 +302,7 @@ export default async function Home() {
               </p>
             </div>
 
-            <div className="mt-8 grid gap-5 md:grid-cols-2">
+            <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
               {projects.slice(0, 6).map((project) => (
                 <TimelineCard key={project.slug} project={project} />
               ))}
@@ -436,10 +438,10 @@ export default async function Home() {
                   as="h2"
                   text="The first commit"
                   durationMs={2000}
-                  className="text-4xl font-semibold text-white md:text-5xl"
+                  className="max-w-xl text-4xl font-semibold leading-tight text-white md:text-5xl"
                   aria-label="Meet the founders"
                 />
-                <p className="mt-5 max-w-sm leading-7 text-blue-100">
+                <p className="mt-6 max-w-xl text-base leading-8 text-gray-300 md:text-lg">
                   Hall of Codes started with a simple belief: strong software
                   communities are designed around generosity, not gatekeeping.
                 </p>

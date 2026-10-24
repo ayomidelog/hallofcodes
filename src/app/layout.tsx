@@ -32,9 +32,9 @@ export const revalidate = 43200; // 12 hours (in seconds)
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.hallofcodes.org"),
-  title: "Hall of Codes - Merging Programmers Beyond Conflicts",
+  title: "Hall of Codes - Build Together",
   description:
-    "We revolutionize development by fostering cohesion among teams, transcending conflicts to drive collective innovation. Harnessing the synergy of diverse talents, we pave the way for seamless collaboration, ensuring projects thrive in an environment of unity and progress.",
+    "We pave the way for seamless collaboration, ensuring projects thrive in an environment of unity and progress.",
   keywords: [
     "Hall of Codes",
     "programming community",
@@ -64,9 +64,9 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Hall of Codes - Merging Programmers Beyond Conflicts",
+    title: "Hall of Codes - Build Together",
     description:
-      "We revolutionize development by fostering cohesion among teams, transcending conflicts to drive collective innovation. Harnessing the synergy of diverse talents, we pave the way for seamless collaboration, ensuring projects thrive in an environment of unity and progress.",
+      "We pave the way for seamless collaboration, ensuring projects thrive in an environment of unity and progress.",
     url: "https://www.hallofcodes.org/",
     siteName: "Hall of Codes",
     images: [
@@ -82,9 +82,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Hall of Codes - Merging Programmers Beyond Conflicts",
+    title: "Hall of Codes - Build Together",
     description:
-      "We revolutionize development by fostering cohesion among teams, transcending conflicts to drive collective innovation. Harnessing the synergy of diverse talents, we pave the way for seamless collaboration, ensuring projects thrive in an environment of unity and progress.",
+      "We pave the way for seamless collaboration, ensuring projects thrive in an environment of unity and progress.",
     images: [
       {
         url: "https://www.hallofcodes.org/hoc-cover.png",

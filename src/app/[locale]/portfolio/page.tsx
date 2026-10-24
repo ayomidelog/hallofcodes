@@ -53,7 +53,7 @@ export default function Portfolio() {
         <div className="relative mx-auto flex min-h-screen max-w-screen-xl flex-col items-start justify-center gap-8 px-6 py-16">
           <h1 className="text-4xl font-bold leading-tight md:text-6xl">
             The people behind the build
-            <span className="block text-blue-400">Meet their portfolios.</span>
+            <span className="block">Meet their portfolios.</span>
           </h1>
           <p className="max-w-2xl text-base text-gray-300 md:text-lg">
             Explore the people who drive Hall of Codes and the personal
@@ -64,9 +64,6 @@ export default function Portfolio() {
 
       <section className="mx-auto flex min-h-screen max-w-6xl flex-col gap-10 px-6 py-16">
         <div className="space-y-4">
-          <div className="inline-flex items-center gap-2 rounded-full bg-blue-500/10 px-4 py-1 text-xs font-semibold text-blue-300">
-            Portfolio
-          </div>
           <h1 className="text-4xl font-bold md:text-5xl">
             Builders with real impact.
           </h1>

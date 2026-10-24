@@ -1,7 +1,4 @@
 import { Project } from "@/lib/projects";
-import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
-import { faGithub } from "@fortawesome/free-brands-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 
 export default function TimelineCard({ project }: { project: Project }) {
@@ -45,7 +42,7 @@ export default function TimelineCard({ project }: { project: Project }) {
               {project.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-md border border-gray-800 bg-gray-950/80 px-2 py-0.5 text-xs font-mono text-gray-300"
+                  className="rounded-md border border-gray-800 bg-gray-950/80 px-2 py-0.5 text-xs text-gray-300"
                 >
                   {tag}
                 </span>
@@ -55,7 +52,7 @@ export default function TimelineCard({ project }: { project: Project }) {
         </div>
 
         {/* Footer Link Actions */}
-        <div className="mt-6 flex items-center justify-between border-t border-gray-800/80 pt-4">
+        <div className="mt-6 flex items-center justify-between pt-4">
           {project.homepage ? (
             <a
               href={project.homepage}
@@ -63,8 +60,7 @@ export default function TimelineCard({ project }: { project: Project }) {
               rel="noreferrer"
               className="inline-flex items-center gap-1.5 text-xs font-medium text-gray-400 transition hover:text-white"
             >
-              Live Demo
-              <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-[10px]" />
+              Live
             </a>
           ) : (
             <div />
@@ -74,9 +70,8 @@ export default function TimelineCard({ project }: { project: Project }) {
             href={project.html_url}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-md shadow-blue-500/20 transition hover:bg-blue-500"
+            className="inline-flex items-center gap-2 rounded bg-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-md shadow-blue-500/20 transition hover:bg-blue-500"
           >
-            <FontAwesomeIcon icon={faGithub} className="h-3.5 w-3.5" />
             View Repository
           </a>
         </div>

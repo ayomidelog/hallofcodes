@@ -46,21 +46,23 @@ function Card({ member, rank }: { member: WakaTimeUser; rank: number }) {
           <p className="text-gray-400 text-sm">@{member.username}</p>
         </div>
 
-        <div className="mt-2 text-sm text-white/80">
-          <span className="text-white font-semibold">{member.codingTime}</span>{" "}
-          coding time
-        </div>
-
-        {/* Languages */}
-        <div className="flex flex-wrap justify-center gap-2 mt-3">
-          {member.languages.slice(0, 5).map((lang) => (
-            <span
-              key={lang}
-              className="text-xs px-2 py-1 rounded-full bg-white/10 text-white/80 border border-white/10"
-            >
-              {lang}
-            </span>
-          ))}
+        <div className="text-left">
+          <div className="mt-2 text-sm text-white/80">
+            <span className="text-white font-semibold">{member.codingTime}</span>{" "}
+            coding time
+          </div>
+  
+          {/* Languages */}
+          <div className="flex flex-wrap gap-2 mt-3">
+            {member.languages.slice(0, 5).map((lang) => (
+              <span
+                key={lang}
+                className="text-xs px-2 py-1 rounded-full bg-white/10 text-white/80 border border-white/10"
+              >
+                {lang}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -76,10 +78,10 @@ export default function HallOfFame({ members }: { members: WakaTimeUser[] }) {
         <ScrambleText
           as="h2"
           text="Hall of Fame"
-          className="text-4xl font-semibold leading-tight text-white md:text-5xl"
+          className="max-w-xl text-4xl font-semibold leading-tight text-white md:text-5xl"
           aria-label="Hall of Fame"
         />
-        <p className="mt-5 max-w-md leading-7 text-gray-400">
+        <p className="mt-6 max-w-xl text-base leading-8 text-gray-300 md:text-lg">
           Every action counts. Here are the top coders in our community based on
           their WakaTime coding time. Keep coding to see your name here!
         </p>

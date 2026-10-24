@@ -43,7 +43,7 @@ export default function Footer({ posts }: { posts: PostEntry[] }) {
 
   return (
     <footer className="bg-gray-900 border-t border-gray-800">
-      <div className="mx-auto px-6 py-10">
+      <div className="mx-0 md:mx-10 px-6 py-10">
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
           <div>
             <div className="flex items-start gap-3">
@@ -59,18 +59,13 @@ export default function Footer({ posts }: { posts: PostEntry[] }) {
                 <div className="text-lg font-semibold text-white">
                   Hall of Codes
                 </div>
-                <div className="text-sm text-gray-400">
-                  Merging Programmers Beyond Conflicts
-                </div>
+                <div className="text-sm text-gray-400">Build Together</div>
               </div>
             </div>
 
             <p className="mt-4 text-sm text-gray-400">
-              We revolutionize development by fostering cohesion among teams,
-              transcending conflicts to drive collective innovation. Harnessing
-              the synergy of diverse talents, we pave the way for seamless
-              collaboration, ensuring projects thrive in an environment of unity
-              and progress.
+              We pave the way for seamless collaboration, ensuring projects
+              thrive in an environment of unity and progress.
             </p>
 
             <div className="mt-4 flex items-center gap-4">

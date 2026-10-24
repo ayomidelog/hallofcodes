@@ -59,7 +59,7 @@ export default async function BlogPage({
         <div className="relative mx-auto flex min-h-screen max-w-screen-xl flex-col items-start justify-center gap-8 px-6 py-16">
           <h1 className="text-4xl font-bold leading-tight md:text-6xl">
             Stories from the build
-            <span className="block text-blue-400">Read, learn, and grow.</span>
+            <span className="block">Read, learn, and grow.</span>
           </h1>
           <p className="max-w-2xl text-base text-gray-300 md:text-lg">
             We share insights on software development, technology trends, and
@@ -72,9 +72,6 @@ export default async function BlogPage({
         <div className="mx-auto flex min-h-screen max-w-screen-xl flex-col justify-center gap-10 px-6 py-16">
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
-              <div className="text-xs font-semibold uppercase tracking-widest text-blue-400">
-                Blogs
-              </div>
               <h2 className="text-3xl font-bold md:text-4xl">
                 Real stories. Real insights.
               </h2>

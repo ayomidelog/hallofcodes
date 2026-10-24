@@ -7,7 +7,7 @@ export default function Community() {
         <div className="relative mx-auto flex min-h-screen max-w-screen-xl flex-col items-start justify-center gap-8 px-6 py-16">
           <h1 className="text-4xl font-bold leading-tight md:text-6xl">
             Build, learn, & ship together
-            <span className="block text-blue-400">This is your crew.</span>
+            <span className="block">This is your crew.</span>
           </h1>
           <p className="max-w-2xl text-base text-gray-300 md:text-lg">
             Our community is a high-signal space for developers, designers, and
@@ -25,34 +25,12 @@ export default function Community() {
               Explore Events
             </button>
           </div>
-
-          <div className="mt-8 grid w-full grid-cols-2 gap-4 text-sm text-gray-300 md:grid-cols-4">
-            {[
-              { label: "Weekly sessions", value: "7+" },
-              { label: "Active projects", value: "2+" },
-              { label: "Mentors", value: "25+" },
-              { label: "Countries", value: "18" },
-            ].map((item) => (
-              <div
-                key={item.label}
-                className="rounded-xl border border-gray-800 bg-gray-900/50 p-4"
-              >
-                <div className="text-lg font-semibold text-white">
-                  {item.value}
-                </div>
-                <div className="text-gray-400">{item.label}</div>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
       <section className="min-h-screen border-t border-gray-900" id="connect">
         <div className="mx-auto flex min-h-screen max-w-screen-xl flex-col justify-center gap-10 px-6 py-16 md:flex-row md:items-center">
           <div className="flex-1 space-y-4">
-            <div className="text-xs font-semibold uppercase tracking-widest text-blue-400">
-              Connect
-            </div>
             <h2 className="text-3xl font-bold md:text-4xl">
               Join the conversation everywhere.
             </h2>
@@ -109,9 +87,6 @@ export default function Community() {
         <div className="mx-auto flex min-h-screen max-w-screen-xl flex-col justify-center gap-10 px-6 py-16">
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
-              <div className="text-xs font-semibold uppercase tracking-widest text-blue-400">
-                Events
-              </div>
               <h2 className="text-3xl font-bold md:text-4xl">
                 Learn faster with high-impact events.
               </h2>
@@ -151,9 +126,6 @@ export default function Community() {
         <div className="mx-auto flex min-h-screen max-w-screen-xl flex-col justify-center gap-8 px-6 py-16">
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
-              <div className="text-xs font-semibold uppercase tracking-widest text-blue-400">
-                Build
-              </div>
               <h2 className="text-3xl font-bold md:text-4xl">
                 Build, share, and grow with the community.
               </h2>
@@ -161,9 +133,6 @@ export default function Community() {
                 Contribute to meaningful open-source projects, pitch new ideas,
                 and help others level up through knowledge sharing.
               </p>
-            </div>
-            <div className="inline-flex items-center rounded-xl bg-blue-500/10 px-4 py-2 text-xs font-semibold text-blue-300">
-              Impact focused collaboration
             </div>
           </div>
 
@@ -247,9 +216,6 @@ export default function Community() {
 
       <section className="min-h-screen border-t border-gray-900">
         <div className="mx-auto flex min-h-screen max-w-screen-xl flex-col justify-center gap-8 px-6 py-16">
-          <div className="text-xs font-semibold uppercase tracking-widest text-blue-400">
-            Sponsorship
-          </div>
           <h2 className="text-3xl font-bold md:text-4xl">
             Supported by partners who believe in builders.
           </h2>
@@ -262,18 +228,13 @@ export default function Community() {
             href="https://start.excelinweb.com/?utm_source=hallofcodes&utm_medium=referral&utm_campaign=sponsorship"
             className="mt-4 rounded-2xl bg-gray-900/60 p-6"
           >
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="text-sm font-semibold text-white">
-                  Newest sponsor
-                </div>
-                <div className="text-xs text-gray-400">ExcelinWeb</div>
-              </div>
+            <div className="flex items-center gap-2">
               <img
-                src="https://start.excelinweb.com/assets/images/logo/excelinweb-logo-white-transparent.png"
+                src="https://excelinweb.com/assets/images/logo/excelinweb-logo-white-transparent.png"
                 alt="ExcelinWeb logo"
                 className="h-10 w-auto opacity-90"
               />
+              <div className="font-semibold text-white">ExcelinWeb</div>
             </div>
 
             <div className="mt-4 grid gap-3 text-sm text-gray-300 md:grid-cols-3">
@@ -312,9 +273,6 @@ export default function Community() {
 
       <section className="min-h-screen border-t border-gray-900">
         <div className="mx-auto flex min-h-screen max-w-screen-xl flex-col justify-center gap-8 px-6 py-16">
-          <div className="text-xs font-semibold uppercase tracking-widest text-blue-400">
-            Portfolio Flex
-          </div>
           <h2 className="text-3xl font-bold md:text-4xl">
             Flex your portfolio designs with the community.
           </h2>
@@ -335,9 +293,6 @@ export default function Community() {
                     must reflect original work and clear ownership.
                   </p>
                 </div>
-                <span className="rounded-full bg-blue-500/10 px-3 py-1 text-[10px] font-semibold text-blue-300">
-                  Required
-                </span>
               </div>
 
               <div className="mt-5 grid gap-3 md:grid-cols-2">
