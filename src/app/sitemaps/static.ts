@@ -5,6 +5,7 @@ const locales = [""];
 
 const routes = [
   "",
+  "/about",
   "/blog",
   "/community",
   "/community-guidelines",

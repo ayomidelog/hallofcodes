@@ -1,4 +1,10 @@
-import MemberCard from "@/components/ui/MemberCard";
+import PageHeader, {
+  headerPrimaryAction,
+  headerSecondaryAction,
+} from "@/components/ui/PageHeader";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ScrambleText from "@/components/ui/ScrambleText";
 import { getMembers, Member } from "@/lib/github/members";
 import { Metadata } from "next";
@@ -45,43 +51,54 @@ export const metadata: Metadata = {
 export default async function Members() {
   const members = await getMembers();
   const memberCount = members.length;
+  const pinned = members.filter((member) => member.location).length;
 
   return (
-    <main className="bg-gray-950 text-white">
-      <section className="relative min-h-screen overflow-hidden">
-        <div className="relative mx-auto flex min-h-screen max-w-screen-xl flex-col items-start justify-center gap-8 px-6 py-16">
-          <h1 className="text-4xl font-bold leading-tight md:text-6xl">
-            The people behind the build
-            <span className="block">Meet the community.</span>
-          </h1>
-          <p className="max-w-2xl text-base text-gray-300 md:text-lg">
-            We’re a diverse, high-impact group of builders, mentors, and
-            collaborators shaping real projects together.
-          </p>
-
-          <div className="flex flex-wrap gap-4">
+    <main className="bg-[#090d16] text-white">
+      <PageHeader
+        title="The people behind the build."
+        subtitle="Meet the community."
+        description="A diverse, high-impact group of builders, mentors, and collaborators shaping real projects together."
+        watermark="members"
+        terminal={{
+          path: "~/hallofcodes/members",
+          command: "gh api orgs/hallofcodes/public_members --jq '.[].login'",
+          output: [
+            ...members.slice(0, 7).map((member) => ({
+              text: `@${member.login}`,
+            })),
+            {
+              text: `... ${Math.max(0, memberCount - 7)} more`,
+              muted: true,
+            },
+          ],
+        }}
+        stats={[
+          { value: `${memberCount}+`, label: "public GitHub members" },
+          { value: 2019, label: "building together since" },
+          { value: pinned, label: "pinned on the globe" },
+        ]}
+        actions={
+          <>
             <Link
               href="https://github.com/hallofcodes/join"
-              className="rounded-xl bg-blue-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/20 transition hover:bg-blue-400"
+              className={headerPrimaryAction}
             >
-              Join the Network
+              <FontAwesomeIcon icon={faGithub} />
+              Join the network
             </Link>
             <Link
               href="https://github.com/hallofcodes?tab=repositories"
-              className="rounded-xl border border-gray-700 px-6 py-3 text-sm font-semibold text-gray-200 transition hover:border-gray-500 hover:text-white"
+              className={headerSecondaryAction}
             >
-              Become a Contributor
+              Become a contributor
+              <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
             </Link>
-          </div>
-        </div>
-      </section>
+          </>
+        }
+      />
 
-      <section
-        style={{
-          backgroundImage:
-            "linear-gradient(180deg, #0d1420 0%, #111827 55%, #172033 100%)",
-        }}
-      >
+      <section className="bg-[#0d1420]">
         <div className="mx-auto max-w-7xl px-6 py-20 md:py-28">
           <div>
             <ScrambleText

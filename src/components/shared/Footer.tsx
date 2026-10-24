@@ -7,6 +7,11 @@ import {
   faLinkedin,
   faYoutube,
 } from "@fortawesome/free-brands-svg-icons";
+import {
+  faArrowRight,
+  faChevronDown,
+  faCodeBranch,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useLocale } from "next-intl";
 import Image from "next/image";
@@ -41,215 +46,206 @@ export default function Footer({ posts }: { posts: PostEntry[] }) {
     router.refresh();
   };
 
+  const navigation = [
+    { href: "/about", label: "About" },
+    { href: "/members", label: "Members" },
+    { href: "/projects", label: "Projects" },
+    { href: "/community", label: "Community" },
+    { href: "/portfolio", label: "Portfolio" },
+    { href: "/blog", label: "Blog" },
+  ];
+
+  const resources = [
+    { href: "/community-guidelines", label: "Community Guidelines" },
+    { href: "/terms-of-service", label: "Terms of Service" },
+    { href: "/privacy-policy", label: "Privacy Policy" },
+    { href: "/rss.xml", label: "RSS Feed" },
+  ];
+
+  const socials = [
+    { href: "https://github.com/hallofcodes", label: "GitHub", icon: faGithub },
+    { href: "https://facebook.com/hallofcodes", label: "Facebook", icon: faFacebook },
+    { href: "https://youtube.com/@hallofcodes", label: "YouTube", icon: faYoutube },
+    {
+      href: "https://linkedin.com/company/hallofcodes",
+      label: "LinkedIn",
+      icon: faLinkedin,
+    },
+  ];
+
+  const columnHeading = "mb-4 text-sm font-semibold text-white";
+  const columnLink =
+    "group flex items-center gap-3 py-1.5 text-sm text-gray-400 transition hover:text-cyan-200";
+
   return (
-    <footer className="bg-gray-900 border-t border-gray-800">
-      <div className="mx-0 md:mx-10 px-6 py-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
-          <div>
-            <div className="flex items-start gap-3">
+    <footer className="bg-[#090d16] px-3 pb-3 pt-16 sm:px-5 sm:pb-5">
+      <div className="mx-auto max-w-7xl border border-white/10 bg-[#080d16]">
+        <div className="flex flex-col gap-4 border-b border-white/10 px-3 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-4">
+          <Link
+            href="/"
+            aria-label="Hall of Codes home"
+            className="group flex min-w-0 items-center gap-3"
+          >
+            <span className="relative flex size-10 shrink-0 items-center justify-center overflow-hidden border border-white/15 bg-white/5">
               <Image
                 src="/hoc-icon.png"
-                alt="Hall of Codes"
-                width={48}
-                height={48}
+                alt=""
+                width={32}
+                height={32}
                 loading="lazy"
-                className="rounded-full"
+                className="size-8 object-contain transition duration-300 group-hover:scale-105"
               />
-              <div>
-                <div className="text-lg font-semibold text-white">
-                  Hall of Codes
-                </div>
-                <div className="text-sm text-gray-400">Build Together</div>
-              </div>
-            </div>
+            </span>
+            <span className="min-w-0">
+              <span className="block truncate text-sm font-semibold text-white sm:text-base">
+                Hall of Codes
+              </span>
+              <span className="block text-[10px] uppercase tracking-[0.18em] text-gray-500">
+                Build together
+              </span>
+            </span>
+          </Link>
 
-            <p className="mt-4 text-sm text-gray-400">
+          <div className="flex items-center gap-2">
+            {socials.map((social) => (
+              <a
+                key={social.label}
+                href={social.href}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={social.label}
+                className="flex size-10 items-center justify-center border border-white/15 text-gray-300 transition hover:border-cyan-300/60 hover:bg-white/5 hover:text-white"
+              >
+                <FontAwesomeIcon icon={social.icon} aria-hidden />
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid gap-px bg-white/10 sm:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1.3fr_1fr]">
+          <div className="bg-[#080d16] p-6">
+            <p className="max-w-xs text-sm leading-7 text-gray-400">
               We pave the way for seamless collaboration, ensuring projects
               thrive in an environment of unity and progress.
             </p>
-
-            <div className="mt-4 flex items-center gap-4">
-              <Link
-                href="https://facebook.com/hallofcodes"
-                target="_blank"
-                rel="noreferrer"
-                className="text-gray-300 hover:text-white"
-              >
-                <FontAwesomeIcon icon={faFacebook} size="lg" aria-hidden />
-              </Link>
-
-              <Link
-                href="https://youtube.com/@hallofcodes"
-                target="_blank"
-                rel="noreferrer"
-                className="text-gray-300 hover:text-white"
-              >
-                <FontAwesomeIcon icon={faYoutube} size="lg" aria-hidden />
-              </Link>
-
-              <Link
-                href="https://linkedin.com/company/hallofcodes"
-                target="_blank"
-                rel="noreferrer"
-                className="text-gray-300 hover:text-white"
-              >
-                <FontAwesomeIcon icon={faLinkedin} size="lg" aria-hidden />
-              </Link>
-
-              <Link
-                href="https://github.com/hallofcodes"
-                target="_blank"
-                rel="noreferrer"
-                className="text-gray-300 hover:text-white"
-              >
-                <FontAwesomeIcon icon={faGithub} size="lg" aria-hidden />
-              </Link>
-            </div>
-
-            <div className="mt-4 flex items-center gap-4">
-              <a
-                href="https://github.com/hallofcodes"
-                target="_blank"
-                rel="noreferrer"
-                className="text-gray-300 hover:text-white"
-              >
-                <i className="fa-solid fa-github fa-lg" aria-hidden />
-                <span className="sr-only">GitHub</span>
-              </a>
-              <a
-                href="https://facebook.com/hallofcodes"
-                target="_blank"
-                rel="noreferrer"
-                className="text-gray-300 hover:text-white"
-              >
-                <i className="fa-brands fa-facebook fa-lg" aria-hidden />
-                <span className="sr-only">Facebook</span>
-              </a>
-            </div>
+            <a
+              href="https://github.com/hallofcodes/join"
+              target="_blank"
+              rel="noreferrer"
+              className="mt-6 inline-flex items-center gap-2 border border-white/15 px-3 py-2 text-xs font-semibold text-gray-200 transition hover:border-cyan-300/60 hover:bg-white/5 hover:text-white"
+            >
+              <FontAwesomeIcon icon={faGithub} />
+              Join the organization
+              <FontAwesomeIcon
+                icon={faArrowRight}
+                className="text-[10px] text-gray-500"
+              />
+            </a>
           </div>
-          <div>
-            <h4 className="text-sm font-semibold text-white mb-3">
-              Quick Links
-            </h4>
-            <ul className="space-y-2 text-gray-400">
-              <li>
-                <Link href="/" className="hover:underline">
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link href="/members" className="hover:underline">
-                  Members
-                </Link>
-              </li>
-              <li>
-                <Link href="/projects" className="hover:underline">
-                  Projects
-                </Link>
-              </li>
-              <li>
-                <Link href="/portfolio" className="hover:underline">
-                  Portfolio
-                </Link>
-              </li>
-              <li>
-                <Link href="/blog" className="hover:underline">
-                  Blog
-                </Link>
-              </li>
-              <li>
-                <Link href="/terms-of-service" className="hover:underline">
-                  Terms of Service
-                </Link>
-              </li>
-              <li>
-                <Link href="/privacy-policy" className="hover:underline">
-                  Privacy Policy
-                </Link>
-              </li>
+
+          <nav aria-label="Footer navigation" className="bg-[#080d16] p-6">
+            <h2 className={columnHeading}>Navigate</h2>
+            <ul>
+              {navigation.map((item, index) => (
+                <li key={item.href}>
+                  <Link href={item.href} className={columnLink}>
+                    <span className="font-mono text-[10px] text-gray-600 group-hover:text-cyan-300">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
-          </div>
-          <div>
-            <h4 className="text-sm font-semibold text-white mb-3">
-              Recent Posts
-            </h4>
+          </nav>
+
+          <div className="bg-[#080d16] p-6">
+            <h2 className={columnHeading}>Recent posts</h2>
             {posts.length > 0 ? (
-              <ul className="space-y-2 text-gray-400">
+              <ul>
                 {posts.map((post) => (
                   <li key={post.slug}>
                     <Link
                       href={`/blog/${post.slug}`}
-                      className="hover:underline line-clamp-1"
+                      className={columnLink}
                       title={post.title}
                     >
-                      {post.title}
+                      <FontAwesomeIcon
+                        icon={faArrowRight}
+                        className="shrink-0 text-[10px] text-gray-600 transition group-hover:translate-x-0.5 group-hover:text-cyan-300"
+                      />
+                      <span className="line-clamp-1">{post.title}</span>
                     </Link>
                   </li>
                 ))}
               </ul>
             ) : (
-              <p className="text-gray-400 text-sm">No recent posts.</p>
+              <p className="text-sm text-gray-400">No recent posts.</p>
             )}
           </div>
-          <div>
-            <h4 className="text-sm font-semibold text-white mb-3">Community</h4>
-            <ul className="space-y-2 text-gray-400">
-              <li>
-                <Link href="/community-guidelines" className="hover:underline">
-                  Community Guidelines
-                </Link>
-              </li>
-              <li>
-                <Link href="/community" className="hover:underline">
-                  Join the Community
-                </Link>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="text-sm font-semibold mb-2 text-white">
-              Language / Region
-            </h4>
-            <div className="relative">
-              <select
-                value={locale}
-                onChange={(e) => handleLocaleChange(e.target.value)}
-                className="w-full appearance-none rounded-lg border border-gray-800 bg-gray-950/40 px-3 py-2 text-sm text-gray-200 focus:outline-none focus:ring-1 focus:ring-gray-500"
-                aria-label="Select language"
-              >
-                {languages.map((lang) => (
-                  <option key={lang.code} value={lang.code}>
-                    {lang.label} · {lang.region}
-                  </option>
+
+          <div className="flex flex-col gap-8 bg-[#080d16] p-6">
+            <div>
+              <h2 className={columnHeading}>Resources</h2>
+              <ul>
+                {resources.map((item) => (
+                  <li key={item.href}>
+                    <Link href={item.href} className={columnLink}>
+                      {item.label}
+                    </Link>
+                  </li>
                 ))}
-              </select>
-              <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">
-                ▼
-              </span>
+              </ul>
+            </div>
+
+            <div>
+              <label htmlFor="footer-language" className={columnHeading + " block"}>
+                Language / Region
+              </label>
+              <div className="relative">
+                <select
+                  id="footer-language"
+                  value={locale}
+                  onChange={(e) => handleLocaleChange(e.target.value)}
+                  className="w-full appearance-none border border-white/15 bg-transparent px-3 py-2 pr-9 text-sm text-gray-200 transition hover:border-cyan-300/60 focus:border-cyan-300 focus:outline-none"
+                >
+                  {languages.map((lang) => (
+                    <option
+                      key={lang.code}
+                      value={lang.code}
+                      className="bg-[#080d16]"
+                    >
+                      {lang.label} ({lang.region})
+                    </option>
+                  ))}
+                </select>
+                <FontAwesomeIcon
+                  icon={faChevronDown}
+                  className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-gray-500"
+                />
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="border-t border-gray-800 mt-8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="text-sm text-gray-400">
+        <div className="flex flex-col gap-3 border-t border-white/10 px-4 py-4 text-xs text-gray-500 sm:flex-row sm:items-center sm:justify-between">
+          <span>
             &copy; {yearText}{" "}
-            <Link
-              href="https://www.hallofcodes.org/"
-              className="hover:underline"
-            >
+            <Link href="/" className="text-gray-300 transition hover:text-white">
               Hall of Codes
             </Link>
-            . All Rights Reserved.
-          </div>
+            . All rights reserved.
+          </span>
 
-          <div className="text-sm text-gray-400">
-            <Link
-              href="https://github.com/hallofcodes"
-              className="hover:underline"
-            >
-              This site is open source.
-            </Link>
-          </div>
+          <a
+            href="https://github.com/hallofcodes/hallofcodes"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 font-mono transition hover:text-cyan-200"
+          >
+            <FontAwesomeIcon icon={faCodeBranch} />
+            This site is open source
+          </a>
         </div>
       </div>
     </footer>

@@ -15,7 +15,7 @@ const timeline: TimelineEntry[] = [
     date: "Sometime in 2021",
     heading: "Rebranded to Hall of Codes",
     description:
-      "We leveled up the name and the mission: build together, argue less, ship more. The community didn’t just survive the rebrand—it got louder, funnier, and far more creative.",
+      "We leveled up the name and the mission: build together, argue less, ship more. The community didn’t just survive the rebrand. It got louder, funnier, and far more creative.",
   },
   {
     date: "November 2021",

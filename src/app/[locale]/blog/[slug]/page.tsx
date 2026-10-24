@@ -1,4 +1,11 @@
 import type { Metadata } from "next";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faArrowLeft,
+  faCalendar,
+  faClock,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { CodeBlock } from "@/components/ui/CodeBlock";
 import Link from "next/link";
@@ -99,9 +106,9 @@ function TableOfContents({ headings }: { headings: PostHeading[] }) {
           >
             <a
               href={`#${h.id}`}
-              className=" hover:text-blue-500 transition-colors"
+              className="text-gray-400 transition-colors hover:text-cyan-300"
             >
-              • {h.text}
+              {h.text}
             </a>
           </li>
         ))}
@@ -144,42 +151,63 @@ export default async function BlogPost({
   };
 
   return (
-    <div className="mt-10 max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="mx-auto max-w-screen-xl px-4 pb-12 pt-28 sm:px-6 lg:px-8">
       <div className="flex justify-center">
         <div className="flex gap-10 w-full max-w-6xl">
           <div className="prose prose-invert w-full max-w-none xl:max-w-prose p-4 md:p-8 flex-1 min-w-0">
-            <Link
-              href="/blog"
-              className="inline-flex items-center gap-1 text-sm text-zinc-500 hover:text-blue-500 transition-colors mb-4 no-underline"
-            >
-              <span>←</span> Back to blogs
-            </Link>
-            <h1 className="text-3xl font-bold text-white mb-4">{data.title}</h1>
-            <div className="text-gray-400 mb-6">{data.excerpt}</div>
-
-            <p className="text-sm text-muted-foreground">
-              <a
-                href={data.author_url ?? "#"}
-                target="_blank"
-                title={data.author}
+            <header className="not-prose mb-12 border-b border-white/10 pb-10">
+              <Link
+                href="/blog"
+                className="inline-flex items-center gap-2 text-sm text-gray-500 transition hover:text-white"
               >
-                @{data.author}
-              </a>{" "}
-              • {data.date} • {estimatedReadingTime} min read
-            </p>
+                <FontAwesomeIcon icon={faArrowLeft} className="text-xs" />
+                Back to the journal
+              </Link>
 
-            {data.topics && data.topics.length > 0 && (
-              <div className="flex flex-wrap gap-2 my-4">
-                {data.topics.map((topic: string, number: number) => (
-                  <span
-                    key={number}
-                    className="inline-flex capitalize rounded-full border px-2.5 py-1 text-xs"
-                  >
-                    {topic}
-                  </span>
-                ))}
+              <h1 className="mt-8 text-4xl font-bold leading-tight text-white md:text-5xl">
+                {data.title}
+                <span
+                  className="caret-blink ml-2 inline-block h-[0.75em] w-[0.4em] translate-y-[0.05em] bg-cyan-300"
+                  aria-hidden
+                />
+              </h1>
+              <p className="mt-6 text-lg leading-8 text-gray-400">
+                {data.excerpt}
+              </p>
+
+              <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 font-mono text-xs text-gray-500">
+                <a
+                  href={data.author_url ?? "#"}
+                  target="_blank"
+                  rel="noreferrer"
+                  title={data.author}
+                  className="inline-flex items-center gap-2 text-gray-300 transition hover:text-cyan-300"
+                >
+                  <FontAwesomeIcon icon={faUser} />@{data.author}
+                </a>
+                <span className="inline-flex items-center gap-2">
+                  <FontAwesomeIcon icon={faCalendar} />
+                  {data.date}
+                </span>
+                <span className="inline-flex items-center gap-2">
+                  <FontAwesomeIcon icon={faClock} />
+                  {estimatedReadingTime} min read
+                </span>
               </div>
-            )}
+
+              {data.topics && data.topics.length > 0 && (
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {data.topics.map((topic: string, number: number) => (
+                    <span
+                      key={number}
+                      className="inline-flex border border-white/15 px-2.5 py-1 font-mono text-xs capitalize text-gray-400"
+                    >
+                      {topic}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </header>
 
             <MDXRemote source={content} components={components} />
           </div>

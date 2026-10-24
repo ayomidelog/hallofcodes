@@ -24,7 +24,7 @@ export default function PortfolioCard({
           src={portfolioItem.img_url}
           alt={`${portfolioItem.name} portfolio preview`}
           fill
-          className="object-cover transition duration-300 group-hover:scale-105"
+          className="object-cover grayscale transition duration-300 group-hover:scale-105 group-hover:grayscale-0"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           loading="lazy"
         />
@@ -35,7 +35,7 @@ export default function PortfolioCard({
           <h2 className="text-lg font-semibold text-white">
             {portfolioItem.name}
           </h2>
-          <p className="text-xs text-blue-300">{portfolioItem.title}</p>
+          <p className="text-xs text-cyan-300">{portfolioItem.title}</p>
         </div>
 
         <div className="rounded-lg bg-gray-950/60 px-2 py-1 text-right">
@@ -53,14 +53,14 @@ export default function PortfolioCard({
         <Link
           href={portfolioItem.link}
           target="_blank"
-          className="inline-flex items-center rounded-lg bg-blue-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-blue-500"
+          className="inline-flex items-center bg-cyan-300 px-3 py-2 text-xs font-semibold text-slate-950 transition hover:bg-white"
         >
           View Portfolio
         </Link>
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="text-xs font-semibold text-blue-400 hover:text-blue-300"
+          className="text-xs font-semibold text-gray-300 hover:text-white"
           aria-label="Read full description"
         >
           Read more
@@ -78,7 +78,7 @@ export default function PortfolioCard({
               <h3 className="text-lg font-semibold text-white">
                 {portfolioItem.name}
               </h3>
-              <p className="text-xs text-blue-300">{portfolioItem.title}</p>
+              <p className="text-xs text-cyan-300">{portfolioItem.title}</p>
             </div>
             <button
               type="button"

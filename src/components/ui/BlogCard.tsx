@@ -1,4 +1,6 @@
 import { PostEntry } from "@/lib/posts";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 
 export default function BlogCard({ post }: { post: PostEntry }) {
@@ -19,7 +21,7 @@ export default function BlogCard({ post }: { post: PostEntry }) {
           <span className="text-sm">@{post.author}</span>
         </div>
 
-        <h2 className="text-lg md:text-xl font-semibold leading-snug mb-2 group-hover:text-blue-500 transition-colors">
+        <h2 className="text-lg md:text-xl font-semibold leading-snug mb-2 group-hover:text-cyan-300 transition-colors">
           {post.title}
         </h2>
 
@@ -27,11 +29,12 @@ export default function BlogCard({ post }: { post: PostEntry }) {
           {post.excerpt}
         </p>
 
-        <div className="mt-5 inline-flex items-center text-sm font-medium text-blue-400">
+        <div className="mt-5 inline-flex items-center text-sm font-medium text-gray-300 group-hover:text-white">
           Read article
-          <span className="ml-1 transition-transform group-hover:translate-x-1">
-            →
-          </span>
+          <FontAwesomeIcon
+            icon={faArrowRight}
+            className="ml-2 text-xs transition-transform group-hover:translate-x-1"
+          />
         </div>
       </Link>
     </li>

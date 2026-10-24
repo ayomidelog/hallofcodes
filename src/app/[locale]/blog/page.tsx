@@ -1,4 +1,15 @@
 import BlogCard from "@/components/ui/BlogCard";
+import PageHeader, {
+  headerPrimaryAction,
+  headerSecondaryAction,
+} from "@/components/ui/PageHeader";
+import {
+  faArrowLeft,
+  faArrowRight,
+  faPenNib,
+  faRss,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getAllPosts, PostEntry } from "@/lib/posts";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -46,6 +57,8 @@ export default async function BlogPage({
   const page = Number.isFinite(rawPage) && rawPage > 0 ? rawPage : 1;
 
   const posts = getAllPosts();
+  const authors = new Set(posts.map((post) => post.author)).size;
+  const topics = new Set(posts.flatMap((post) => post.topics ?? [])).size;
   const totalPages = Math.max(1, Math.ceil(posts.length / POSTS_PER_PAGE));
 
   const safePage = Math.min(page, totalPages);
@@ -54,29 +67,51 @@ export default async function BlogPage({
   const paginatedPosts = posts.slice(start, end);
 
   return (
-    <main className="bg-gray-950 text-white">
-      <section className="relative min-h-screen overflow-hidden">
-        <div className="relative mx-auto flex min-h-screen max-w-screen-xl flex-col items-start justify-center gap-8 px-6 py-16">
-          <h1 className="text-4xl font-bold leading-tight md:text-6xl">
-            Stories from the build
-            <span className="block">Read, learn, and grow.</span>
-          </h1>
-          <p className="max-w-2xl text-base text-gray-300 md:text-lg">
-            We share insights on software development, technology trends, and
-            growth in the tech industry crafted for builders.
-          </p>
-        </div>
-      </section>
+    <main className="bg-[#090d16] text-white">
+      <PageHeader
+        title="Stories from the build."
+        subtitle="Read, learn, and grow."
+        description="Insights on software development, technology trends, and growth in the tech industry, written by builders for builders."
+        watermark="journal"
+        terminal={{
+          path: "~/hallofcodes/content/blog",
+          command: "tail -n 5 journal.log",
+          output: posts.slice(0, 5).map((post) => ({
+            text: `${post.date}  ${post.title}`,
+          })),
+        }}
+        stats={[
+          { value: String(posts.length).padStart(2, "0"), label: "articles published" },
+          { value: authors, label: "community authors" },
+          { value: topics, label: "topics explored" },
+          { value: "RSS", label: "subscribe at /rss.xml" },
+        ]}
+        actions={
+          <>
+            <Link
+              href="/blog/contribute-to-hall-of-codes-blog"
+              className={headerPrimaryAction}
+            >
+              <FontAwesomeIcon icon={faPenNib} />
+              Write for the blog
+            </Link>
+            <a href="/rss.xml" className={headerSecondaryAction}>
+              <FontAwesomeIcon icon={faRss} />
+              RSS feed
+            </a>
+          </>
+        }
+      />
 
-      <section className="min-h-screen border-t border-gray-900">
-        <div className="mx-auto flex min-h-screen max-w-screen-xl flex-col justify-center gap-10 px-6 py-16">
+      <section>
+        <div className="mx-auto flex max-w-7xl flex-col gap-10 px-6 py-20 md:py-28">
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
-              <h2 className="text-3xl font-bold md:text-4xl">
+              <h2 className="text-3xl font-semibold md:text-4xl">
                 Real stories. Real insights.
               </h2>
-              <p className="max-w-2xl text-gray-300">
-                Dive into our members' experiences, lessons learned, and
+              <p className="mt-4 max-w-2xl leading-7 text-gray-400">
+                Dive into our members&apos; experiences, lessons learned, and
                 thoughts on software development, technology, and personal
                 growth.
               </p>
@@ -89,13 +124,14 @@ export default async function BlogPage({
             ))}
           </ul>
 
-          <div className="mt-8 flex items-center justify-between border-t border-gray-800 pt-6 text-sm">
+          <div className="mt-8 flex items-center justify-between border-t border-white/10 pt-6 text-sm">
             {safePage > 1 ? (
               <Link
                 href={`/blog?page=${safePage - 1}`}
-                className="rounded-lg border border-gray-700 px-4 py-2 text-gray-200 transition hover:border-gray-500 hover:text-white"
+                className="inline-flex items-center border border-white/20 px-4 py-2 text-gray-200 transition hover:border-white hover:text-white"
               >
-                ← Previous
+                <FontAwesomeIcon icon={faArrowLeft} className="mr-2 text-xs" />
+                Previous
               </Link>
             ) : (
               <span />
@@ -106,9 +142,10 @@ export default async function BlogPage({
             {safePage < totalPages ? (
               <Link
                 href={`/blog?page=${safePage + 1}`}
-                className="rounded-lg border border-gray-700 px-4 py-2 text-gray-200 transition hover:border-gray-500 hover:text-white"
+                className="inline-flex items-center border border-white/20 px-4 py-2 text-gray-200 transition hover:border-white hover:text-white"
               >
-                Next →
+                Next
+                <FontAwesomeIcon icon={faArrowRight} className="ml-2 text-xs" />
               </Link>
             ) : (
               <span />

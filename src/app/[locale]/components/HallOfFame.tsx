@@ -1,71 +1,82 @@
 import ScrambleText from "@/components/ui/ScrambleText";
 import { WakaTimeUser } from "@/lib/wakatime/leaderboards";
+import { faArrowRight, faCrown } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Image from "next/image";
 
-const crown = "👑";
-
-function RankBadge({ rank }: { rank: number }) {
-  const styles =
-    rank === 1
-      ? "bg-yellow-500 text-black"
-      : rank === 2
-        ? "bg-gray-300 text-black"
-        : "bg-orange-500 text-black";
+function Podium({ member, rank }: { member: WakaTimeUser; rank: number }) {
+  const first = rank === 1;
 
   return (
-    <div
-      className={`absolute -top-4 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-xs font-bold shadow-md ${styles}`}
+    <a
+      href={`https://github.com/${member.username}`}
+      target="_blank"
+      rel="noreferrer"
+      className={`group relative flex flex-col bg-[#090d16] p-6 transition hover:bg-white/[0.03] md:border md:border-white/10 md:p-8 ${
+        first ? "md:order-2 md:pb-16" : rank === 2 ? "md:order-1 md:mt-12" : "md:order-3 md:mt-20"
+      }`}
+      data-aos="fade-up"
+      data-aos-delay={rank * 100}
     >
-      {rank === 1 ? crown : rank}
-    </div>
-  );
-}
+      {first && (
+        <span className="absolute inset-x-0 top-0 h-px bg-cyan-300" aria-hidden />
+      )}
 
-function Card({ member, rank }: { member: WakaTimeUser; rank: number }) {
-  const glow =
-    rank === 1
-      ? "border-yellow-500 shadow-yellow-500/20"
-      : rank === 2
-        ? "border-gray-400 shadow-gray-400/10"
-        : "border-orange-500 shadow-orange-500/10";
+      <div className="flex items-start justify-between">
+        <span
+          className={`font-mono text-5xl font-bold leading-none ${
+            first ? "text-white" : "text-gray-700"
+          }`}
+        >
+          {String(rank).padStart(2, "0")}
+        </span>
+        {first && (
+          <FontAwesomeIcon
+            icon={faCrown}
+            className="text-xl text-cyan-300"
+            aria-label="Top coder"
+          />
+        )}
+      </div>
 
-  return (
-    <div
-      className={`relative w-full rounded-2xl border bg-black/40 backdrop-blur-md p-6 ${glow} shadow-xl`}
-    >
-      <RankBadge rank={rank} />
-
-      <div className="flex flex-col items-center text-center gap-3 mt-4">
-        <img
+      <div className="mt-10 flex items-center gap-4">
+        <Image
           src={`https://avatars.githubusercontent.com/${member.username}`}
           alt={member.name}
-          className="w-16 h-16 rounded-full"
+          width={64}
+          height={64}
+          className="size-14 shrink-0 rounded-full object-cover grayscale transition duration-300 group-hover:grayscale-0"
         />
-
-        <div>
-          <h3 className="text-white text-lg font-semibold">{member.name}</h3>
-          <p className="text-gray-400 text-sm">@{member.username}</p>
-        </div>
-
-        <div className="text-left">
-          <div className="mt-2 text-sm text-white/80">
-            <span className="text-white font-semibold">{member.codingTime}</span>{" "}
-            coding time
-          </div>
-  
-          {/* Languages */}
-          <div className="flex flex-wrap gap-2 mt-3">
-            {member.languages.slice(0, 5).map((lang) => (
-              <span
-                key={lang}
-                className="text-xs px-2 py-1 rounded-full bg-white/10 text-white/80 border border-white/10"
-              >
-                {lang}
-              </span>
-            ))}
-          </div>
+        <div className="min-w-0">
+          <h3 className="truncate text-lg font-semibold text-white">
+            {member.name}
+          </h3>
+          <p className="truncate font-mono text-xs text-gray-500">
+            @{member.username}
+          </p>
         </div>
       </div>
-    </div>
+
+      <div className="mt-8 border-t border-white/10 pt-6">
+        <div className="text-2xl font-semibold text-white md:text-3xl">
+          {member.codingTime}
+        </div>
+        <div className="mt-1 text-xs text-gray-500">coded this week</div>
+      </div>
+
+      {member.languages.length > 0 && (
+        <div className="mt-6 flex flex-wrap gap-1.5">
+          {member.languages.slice(0, 4).map((lang) => (
+            <span
+              key={lang}
+              className="border border-white/10 px-2 py-0.5 font-mono text-[11px] text-gray-400"
+            >
+              {lang}
+            </span>
+          ))}
+        </div>
+      )}
+    </a>
   );
 }
 
@@ -74,50 +85,46 @@ export default function HallOfFame({ members }: { members: WakaTimeUser[] }) {
 
   return (
     <>
-      <div className="mb-15">
-        <ScrambleText
-          as="h2"
-          text="Hall of Fame"
-          className="max-w-xl text-4xl font-semibold leading-tight text-white md:text-5xl"
-          aria-label="Hall of Fame"
-        />
-        <p className="mt-6 max-w-xl text-base leading-8 text-gray-300 md:text-lg">
-          Every action counts. Here are the top coders in our community based on
-          their WakaTime coding time. Keep coding to see your name here!
+      <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
+        <div>
+          <ScrambleText
+            as="h2"
+            text="Hall of Fame"
+            durationMs={2000}
+            className="max-w-xl text-4xl font-semibold leading-tight text-white md:text-5xl"
+          />
+          <p className="mt-6 max-w-xl text-base leading-8 text-gray-400 md:text-lg">
+            The members who logged the most coding time this week on the
+            public WakaTime leaderboard. Every keystroke counts.
+          </p>
+        </div>
+        <a
+          href="https://wakatime.com/leaders"
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center gap-3 text-sm font-semibold text-gray-300 transition hover:gap-5 hover:text-white"
+        >
+          Full leaderboard on WakaTime
+          <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
+        </a>
+      </div>
+
+      {top3.length > 0 ? (
+        <div className="mt-12 grid items-start gap-px border border-white/10 bg-white/10 md:grid-cols-3 md:border-0 md:bg-transparent md:gap-4">
+          {top3.map((member, index) => (
+            <Podium key={member.username} member={member} rank={index + 1} />
+          ))}
+        </div>
+      ) : (
+        <p className="mt-12 border border-white/10 p-8 text-gray-400">
+          The leaderboard is warming up. Check back after the next refresh.
         </p>
-      </div>
+      )}
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
-        {top3[1] && (
-          <div
-            className="md:translate-y-6"
-            data-aos="fade-up"
-            data-aos-delay="100"
-          >
-            <Card member={top3[1]} rank={2} />
-          </div>
-        )}
-
-        {top3[0] && (
-          <div
-            className="md:scale-110 z-10"
-            data-aos="fade-up"
-            data-aos-delay="200"
-          >
-            <Card member={top3[0]} rank={1} />
-          </div>
-        )}
-
-        {top3[2] && (
-          <div
-            className="md:translate-y-10"
-            data-aos="fade-up"
-            data-aos-delay="300"
-          >
-            <Card member={top3[2]} rank={3} />
-          </div>
-        )}
-      </div>
+      <p className="mt-8 max-w-2xl text-sm leading-7 text-gray-500">
+        Want your name here? Join the GitHub organization, connect WakaTime to
+        your editor, and make your WakaTime profile public.
+      </p>
     </>
   );
 }

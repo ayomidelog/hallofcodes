@@ -42,3 +42,31 @@ h6 {
     ):after {
     content: "";
 }
+
+/* blinking block caret used by page headers and terminals */
+@keyframes caret-blink {
+    0%,
+    49% {
+        opacity: 1;
+    }
+    50%,
+    100% {
+        opacity: 0;
+    }
+}
+
+.caret-blink {
+    animation: caret-blink 1s step-end infinite;
+}
+
+/* oversized outlined watermark text behind page headers */
+.text-outline {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.07);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .caret-blink {
+        animation: none;
+    }
+}

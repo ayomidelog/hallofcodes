@@ -13,11 +13,12 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 const navigation = [
-  { href: "/members", label: "Members", index: "01" },
-  { href: "/projects", label: "Projects", index: "02" },
-  { href: "/community", label: "Community", index: "03" },
-  { href: "/portfolio", label: "Portfolio", index: "04" },
-  { href: "/blog", label: "Blog", index: "05" },
+  { href: "/about", label: "About", index: "02" },
+  { href: "/members", label: "Members", index: "02" },
+  { href: "/projects", label: "Projects", index: "03" },
+  { href: "/community", label: "Community", index: "04" },
+  { href: "/portfolio", label: "Portfolio", index: "05" },
+  { href: "/blog", label: "Blog", index: "06" },
 ];
 
 export default function Nav() {
@@ -94,9 +95,7 @@ export default function Nav() {
                   href={item.href}
                   aria-current={active ? "page" : undefined}
                   className={`relative px-4 py-2 text-sm transition ${
-                    active
-                      ? "text-white"
-                      : "text-gray-400 hover:text-cyan-200"
+                    active ? "text-white" : "text-gray-400 hover:text-cyan-200"
                   }`}
                 >
                   {item.label}
@@ -127,7 +126,9 @@ export default function Nav() {
 
             <button
               type="button"
-              aria-label={open ? "Close navigation menu" : "Open navigation menu"}
+              aria-label={
+                open ? "Close navigation menu" : "Open navigation menu"
+              }
               aria-expanded={open}
               aria-controls="mobile-navigation"
               onClick={() => setOpen((current) => !current)}
@@ -203,7 +204,9 @@ export default function Nav() {
         aria-label="Close navigation menu"
         onClick={() => setOpen(false)}
         className={`fixed inset-0 -z-10 bg-black/45 backdrop-blur-sm transition-opacity lg:hidden ${
-          open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+          open
+            ? "pointer-events-auto opacity-100"
+            : "pointer-events-none opacity-0"
         }`}
       />
     </nav>

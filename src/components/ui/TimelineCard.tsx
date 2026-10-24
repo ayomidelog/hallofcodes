@@ -10,7 +10,7 @@ export default function TimelineCard({ project }: { project: Project }) {
   return (
     <article
       data-aos="fade-up"
-      className="group flex flex-col overflow-hidden rounded-2xl border border-gray-800/80 bg-gray-900/50 backdrop-blur-sm transition-all duration-300 hover:border-blue-500/40 hover:bg-gray-900/80 hover:shadow-xl hover:shadow-blue-500/5"
+      className="group flex flex-col overflow-hidden rounded-2xl border border-gray-800/80 bg-gray-900/50 backdrop-blur-sm transition-all duration-300 hover:border-cyan-300/40 hover:bg-gray-900/80"
     >
       {/* 1 Cover Image per Card */}
       <div className="relative aspect-[16/9] w-full overflow-hidden border-b border-gray-800/80 bg-gray-950">
@@ -18,16 +18,15 @@ export default function TimelineCard({ project }: { project: Project }) {
           src={imageSrc}
           alt={`${project.name} cover`}
           fill
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          className="object-cover grayscale transition duration-500 group-hover:scale-105 group-hover:grayscale-0"
           loading="lazy"
         />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-gray-950/90 via-transparent to-transparent" />
       </div>
 
       <div className="flex flex-1 flex-col justify-between p-6">
         <div>
           {/* Title */}
-          <h3 className="text-xl font-bold tracking-tight text-white transition group-hover:text-blue-400">
+          <h3 className="text-xl font-bold tracking-tight text-white transition group-hover:text-cyan-300">
             {project.name}
           </h3>
 
@@ -70,7 +69,7 @@ export default function TimelineCard({ project }: { project: Project }) {
             href={project.html_url}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded bg-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-md shadow-blue-500/20 transition hover:bg-blue-500"
+            className="inline-flex items-center gap-2 bg-cyan-300 px-4 py-2 text-xs font-semibold text-slate-950 transition hover:bg-white"
           >
             View Repository
           </a>

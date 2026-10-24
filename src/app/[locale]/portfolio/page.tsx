@@ -1,4 +1,6 @@
-import Image from "next/image";
+import PageHeader, { headerSecondaryAction } from "@/components/ui/PageHeader";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import portfolio from "@/lib/portfolio";
 import { Metadata } from "next";
@@ -48,25 +50,37 @@ export default function Portfolio() {
   const portfolioItems = portfolio;
 
   return (
-    <main className="bg-gray-950 text-white">
-      <section className="relative min-h-screen overflow-hidden">
-        <div className="relative mx-auto flex min-h-screen max-w-screen-xl flex-col items-start justify-center gap-8 px-6 py-16">
-          <h1 className="text-4xl font-bold leading-tight md:text-6xl">
-            The people behind the build
-            <span className="block">Meet their portfolios.</span>
-          </h1>
-          <p className="max-w-2xl text-base text-gray-300 md:text-lg">
-            Explore the people who drive Hall of Codes and the personal
-            portfolios that show their craft.
-          </p>
-        </div>
-      </section>
+    <main className="bg-[#090d16] text-white">
+      <PageHeader
+        title="The people behind the build."
+        subtitle="Meet their portfolios."
+        description="Explore the people who drive Hall of Codes and the personal portfolios that show their craft."
+        watermark="portfolio"
+        terminal={{
+          path: "~/hallofcodes/public/portfolio",
+          command: "ls public/portfolio",
+          output: portfolioItems.map((item) => ({
+            text: item.img_url.replace("/portfolio/", ""),
+          })),
+        }}
+        stats={[
+          { value: String(portfolioItems.length).padStart(2, "0"), label: "featured builders" },
+          { value: "100%", label: "original work" },
+          { value: "1 PR", label: "to get featured" },
+        ]}
+        actions={
+          <Link href="/community#portfolio" className={headerSecondaryAction}>
+            Get featured
+            <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
+          </Link>
+        }
+      />
 
-      <section className="mx-auto flex min-h-screen max-w-6xl flex-col gap-10 px-6 py-16">
+      <section className="mx-auto flex max-w-7xl flex-col gap-10 px-6 py-20 md:py-28">
         <div className="space-y-4">
-          <h1 className="text-4xl font-bold md:text-5xl">
+          <h2 className="text-4xl font-semibold md:text-5xl">
             Builders with real impact.
-          </h1>
+          </h2>
           <p className="max-w-2xl text-gray-300">
             The portfolio showcases the builders who contribute to Hall of
             Codes, highlighting their work and impact.
@@ -83,7 +97,7 @@ export default function Portfolio() {
           ))}
         </div>
 
-        <div className="mt-12 rounded-2xl border border-gray-800/60 bg-gray-900/50 p-6 shadow-sm">
+        <div className="mt-12 border border-white/10 p-6 md:p-8">
           <div className="inline md:flex items-start justify-between gap-4">
             <div>
               <h3 className="text-xl font-semibold text-white">
@@ -94,7 +108,7 @@ export default function Portfolio() {
                 reflect original work and clear ownership.
               </p>
             </div>
-            <span className="rounded-full bg-blue-500/10 px-3 py-1 text-[10px] font-semibold text-blue-300">
+            <span className="mt-4 inline-block border border-cyan-300/40 px-3 py-1 text-xs font-semibold text-cyan-300 md:mt-0">
               Required
             </span>
           </div>
@@ -108,9 +122,9 @@ export default function Portfolio() {
             ].map((item, index) => (
               <div
                 key={item}
-                className="flex gap-3 rounded-xl border border-gray-800/60 bg-gray-950/40 p-4"
+                className="flex gap-4 border border-white/10 p-4"
               >
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-500/10 text-xs font-semibold text-blue-300">
+                <div className="pt-1 font-mono text-xs text-cyan-300">
                   {String(index + 1).padStart(2, "0")}
                 </div>
                 <p className="text-sm text-gray-300">{item}</p>

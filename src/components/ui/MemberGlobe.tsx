@@ -2,8 +2,7 @@
 
 import createGlobe from "cobe";
 import Image from "next/image";
-import Link from "next/link";
-import { type CSSProperties, useEffect, useMemo, useRef } from "react";
+import { type CSSProperties, useEffect, useMemo, useRef, useState } from "react";
 import type { Member } from "@/lib/github/members";
 
 type MemberGlobeProps = {
@@ -14,29 +13,36 @@ type AnchorStyle = CSSProperties & {
   positionAnchor: string;
 };
 
+/** Members rendered as markers on the globe. */
+const MARKER_LIMIT = 24;
+/** Of those, how many also get a floating avatar pin. Kept low to avoid clutter. */
+const PIN_LIMIT = 10;
+
+/** Deterministic fallback position for members without a known location. */
+function locationFromLogin(login: string): [number, number] {
+  let hash = 0;
+
+  for (let index = 0; index < login.length; index++) {
+    hash = (hash * 31 + login.charCodeAt(index)) >>> 0;
+  }
+
+  const latitude = (hash % 12000) / 100 - 60;
+  const longitude = ((hash >>> 8) % 36000) / 100 - 180;
+
+  return [latitude, longitude];
+}
+
 export default function MemberGlobe({ members }: MemberGlobeProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [ready, setReady] = useState(false);
 
-  const locationFromLogin = (login: string): [number, number] => {
-    let hash = 0;
-
-    for (let index = 0; index < login.length; index++) {
-      hash = (hash * 31 + login.charCodeAt(index)) >>> 0;
-    }
-
-    const latitude = (hash % 12000) / 100 - 60;
-    const longitude = ((hash >>> 8) % 36000) / 100 - 180;
-
-    return [latitude, longitude];
-  };
-
-  const visibleMembers = useMemo(
+  const markers = useMemo(
     () =>
-      members.slice(0, 24).map((member, index) => ({
+      members.slice(0, MARKER_LIMIT).map((member, index) => ({
         ...member,
-        id: `member-${index}-${member.login.toLowerCase()}`,
-        location: locationFromLogin(member.login),
+        id: `member-${index}-${member.login.toLowerCase().replace(/[^a-z0-9-]/g, "")}`,
+        location: member.location ?? locationFromLogin(member.login),
       })),
     [members],
   );
@@ -47,16 +53,22 @@ export default function MemberGlobe({ members }: MemberGlobeProps) {
 
     if (!canvas || !container) return;
 
-    const pixelRatio = Math.min(window.devicePixelRatio, 2);
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
     let size = Math.max(container.clientWidth, 1);
 
     let phi = 0;
     let targetPhi = 0;
-    let theta = 0.18;
-    let targetTheta = 0.18;
+    let theta = 0.2;
+    let targetTheta = 0.2;
     let pointerX: number | null = null;
     let pointerY: number | null = null;
     let animationFrame = 0;
+    let running = false;
+    let onScreen = true;
+    let firstFrame = true;
 
     const globe = createGlobe(canvas, {
       devicePixelRatio: pixelRatio,
@@ -65,31 +77,46 @@ export default function MemberGlobe({ members }: MemberGlobeProps) {
       phi,
       theta,
       dark: 1,
-      diffuse: 1.5,
-      mapSamples: 18000,
-      mapBrightness: 4,
-      mapBaseBrightness: 0.05,
-      baseColor: [0.08, 0.15, 0.28],
-      markerColor: [0.23, 0.51, 0.96],
-      glowColor: [0.12, 0.3, 0.65],
-      markerElevation: 0.04,
-      markers: visibleMembers.map((member) => ({
-        id: member.id,
-        location: member.location,
-        size: 0.045,
+      diffuse: 1.4,
+      mapSamples: 16000,
+      mapBrightness: 5,
+      mapBaseBrightness: 0.04,
+      baseColor: [0.12, 0.14, 0.18],
+      markerColor: [0.4, 0.91, 0.98],
+      glowColor: [0.14, 0.18, 0.24],
+      markerElevation: 0.03,
+      markers: markers.map((marker) => ({
+        id: marker.id,
+        location: marker.location,
+        size: 0.04,
       })),
     });
 
-    const animate = () => {
-      if (pointerX === null) {
-        targetPhi += 0.0025;
-      }
+    const frame = () => {
+      if (pointerX === null && !reducedMotion) targetPhi += 0.003;
 
       phi += (targetPhi - phi) * 0.08;
       theta += (targetTheta - theta) * 0.08;
-
       globe.update({ phi, theta });
-      animationFrame = requestAnimationFrame(animate);
+
+      if (firstFrame) {
+        firstFrame = false;
+        setReady(true);
+      }
+
+      animationFrame = requestAnimationFrame(frame);
+    };
+
+    // Only animate while the globe is on screen and the tab is visible.
+    const start = () => {
+      if (running || !onScreen || document.hidden) return;
+      running = true;
+      animationFrame = requestAnimationFrame(frame);
+    };
+
+    const stop = () => {
+      running = false;
+      cancelAnimationFrame(animationFrame);
     };
 
     const handlePointerDown = (event: PointerEvent) => {
@@ -115,106 +142,108 @@ export default function MemberGlobe({ members }: MemberGlobeProps) {
     const handlePointerUp = (event: PointerEvent) => {
       pointerX = null;
       pointerY = null;
-      canvas.releasePointerCapture(event.pointerId);
+      if (canvas.hasPointerCapture(event.pointerId)) {
+        canvas.releasePointerCapture(event.pointerId);
+      }
       canvas.style.cursor = "grab";
     };
 
-    const handleScroll = () => {
-      targetPhi += window.scrollY * 0.000002;
-    };
+    const handleVisibility = () => (document.hidden ? stop() : start());
 
-    const observer = new ResizeObserver(([entry]) => {
-      size = Math.max(entry.contentRect.width, 1);
+    const resizeObserver = new ResizeObserver(([entry]) => {
+      const nextSize = Math.max(Math.round(entry.contentRect.width), 1);
+      if (nextSize === size) return;
 
+      size = nextSize;
       globe.update({
         width: size * pixelRatio,
         height: size * pixelRatio,
       });
     });
 
+    const intersectionObserver = new IntersectionObserver(([entry]) => {
+      onScreen = entry.isIntersecting;
+      if (onScreen) start();
+      else stop();
+    });
+
     canvas.style.cursor = "grab";
-    canvas.style.touchAction = "pan-y";
 
     canvas.addEventListener("pointerdown", handlePointerDown);
     canvas.addEventListener("pointermove", handlePointerMove);
     canvas.addEventListener("pointerup", handlePointerUp);
     canvas.addEventListener("pointercancel", handlePointerUp);
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    document.addEventListener("visibilitychange", handleVisibility);
 
-    observer.observe(container);
-    animate();
+    resizeObserver.observe(container);
+    intersectionObserver.observe(container);
+    start();
 
     return () => {
-      cancelAnimationFrame(animationFrame);
-      observer.disconnect();
+      stop();
+      resizeObserver.disconnect();
+      intersectionObserver.disconnect();
 
       canvas.removeEventListener("pointerdown", handlePointerDown);
       canvas.removeEventListener("pointermove", handlePointerMove);
       canvas.removeEventListener("pointerup", handlePointerUp);
       canvas.removeEventListener("pointercancel", handlePointerUp);
-      window.removeEventListener("scroll", handleScroll);
+      document.removeEventListener("visibilitychange", handleVisibility);
 
       globe.destroy();
     };
-  }, [visibleMembers]);
+  }, [markers]);
 
   return (
-    <div className="absolute right-8 top-1/2 hidden w-[min(42vw,560px)] -translate-y-1/2 lg:block">
-      <div
-        ref={containerRef}
-        className="relative aspect-square w-full"
-        aria-label="Hall of Codes GitHub members around the world"
-      >
-        <canvas
-          ref={canvasRef}
-          className="h-full w-full cursor-grab opacity-90 active:cursor-grabbing"
-          style={{
-            contain: "layout paint size",
-            touchAction: "pan-y",
-          }}
-        />
+    <div
+      ref={containerRef}
+      className="relative aspect-square w-full"
+      role="img"
+      aria-label={`Globe showing ${members.length} Hall of Codes GitHub members`}
+    >
+      <canvas
+        ref={canvasRef}
+        className={`h-full w-full touch-pan-y transition-opacity duration-1000 ${
+          ready ? "opacity-100" : "opacity-0"
+        }`}
+        style={{ contain: "layout paint size" }}
+      />
 
-        {visibleMembers.map((member) => (
-          <Link
-            key={member.id}
-            href={`https://github.com/${member.login}`}
-            target="_blank"
-            rel="noreferrer"
-            title={`@${member.login}`}
-            className="group absolute z-10 transition-[opacity,filter,scale] duration-300"
-            style={
-              {
-                positionAnchor: `--cobe-${member.id}`,
-                bottom: "anchor(center)",
-                left: "anchor(center)",
-                translate: "-50% 50%",
-                opacity: `var(--cobe-visible-${member.id}, 0)`,
-                filter: `blur(calc((1 - var(--cobe-visible-${member.id}, 0)) * 5px))`,
-                scale:
-                  "calc(.75 + var(--cobe-visible-" + member.id + ", 0) * .25)",
-              } as AnchorStyle
-            }
-          >
-            <span className="flex items-center gap-2 rounded-full border border-white/20 bg-black/75 p-1.5 pr-3 shadow-xl backdrop-blur-md group-hover:border-blue-400/70">
-              <Image
-                src={member.avatar}
-                alt=""
-                width={40}
-                height={40}
-                className="size-10 rounded-full object-cover ring-2 ring-blue-400/60"
-              />
-
-              <span className="max-w-28 truncate text-xs font-medium text-white">
-                @{member.login}
-              </span>
-            </span>
-          </Link>
-        ))}
-
-        <div className="absolute bottom-[8%] left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/10 bg-black/60 px-4 py-2 text-xs text-gray-300 backdrop-blur">
-          {members.length}+ GitHub members worldwide
-        </div>
-      </div>
+      {/* Avatar pins rely on CSS anchor positioning; browsers without it
+          only get the globe markers instead of a pile of stacked pins. */}
+      {markers.slice(0, PIN_LIMIT).map((marker) => (
+        <a
+          key={marker.id}
+          href={`https://github.com/${marker.login}`}
+          target="_blank"
+          rel="noreferrer"
+          title={`@${marker.login}`}
+          aria-label={`@${marker.login} on GitHub`}
+          className="group absolute z-10 hidden transition-[opacity,scale] duration-300 supports-[position-anchor:--a]:block"
+          style={
+            {
+              positionAnchor: `--cobe-${marker.id}`,
+              bottom: "anchor(center)",
+              left: "anchor(center)",
+              translate: "-50% -8px",
+              opacity: `var(--cobe-visible-${marker.id}, 0)`,
+              scale: `calc(.6 + var(--cobe-visible-${marker.id}, 0) * .4)`,
+              pointerEvents: ready ? undefined : "none",
+            } as AnchorStyle
+          }
+        >
+          <Image
+            src={marker.avatar}
+            alt=""
+            width={36}
+            height={36}
+            className="size-9 rounded-full border-2 border-[#090d16] object-cover outline outline-1 outline-white/25 grayscale transition duration-300 group-hover:outline-cyan-300 group-hover:grayscale-0"
+          />
+          <span className="pointer-events-none absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap border border-white/15 bg-[#080d16] px-2 py-1 font-mono text-[11px] text-gray-200 opacity-0 transition group-hover:opacity-100">
+            @{marker.login}
+          </span>
+        </a>
+      ))}
     </div>
   );
 }
