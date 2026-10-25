@@ -113,6 +113,7 @@ export default async function RootLayout({
     >
       <head>
         <meta name="hostname" content="www.hallofcodes.org" />
+        <script src="https://app.aiskillhub.dev/widget.js" data-widget="wgt_gm7hte1minkxrvhg1kcxvvlz" async></script>
       </head>
 
       <body className="antialiased">

@@ -7,9 +7,10 @@ const ContentSecurityPolicy = `
   base-uri 'self';
   object-src 'none';
 
-  frame-ancestors 'none';
-
-  script-src 'self' 'unsafe-inline';
+  script-src
+    'self'
+    'unsafe-inline'
+    https://app.aiskillhub.dev;
 
   style-src 'self' 'unsafe-inline';
 
@@ -30,7 +31,8 @@ const ContentSecurityPolicy = `
 
   connect-src 'self';
 
-  frame-src 'none';
+  frame-src
+    https://app.aiskillhub.dev;
 
   worker-src 'self' blob:;
 `.replace(/\n/g, "");
