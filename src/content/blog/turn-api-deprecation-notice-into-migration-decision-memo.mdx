@@ -1,0 +1,89 @@
+---
+title: "Turn an API deprecation notice into a migration decision memo"
+date: "2026-10-20"
+excerpt: "A worked example of separating documented API changes, affected consumers and unresolved facts before a migration becomes a code change."
+topics: ["ai", "documentation", "maintenance", "apis"]
+author: "ColunTina"
+author_url: "https://github.com/BlueSkyID666"
+---
+
+A provider announces an API retirement. One colleague says the upgrade is already done, another remembers an old integration, and a release deadline is approaching. Turning those fragments directly into implementation instructions can hide the question that matters first: which consumers are actually affected?
+
+[Orkas](https://orkas.ai/?source=gh_hallofcodes) is an open-source, local-first desktop AI workspace for research, documents, development and creative work. Commander coordinates specialist agents through one conversation. You can use supported model providers with your own API keys or choose Orkas-managed models. For a maintenance task, its useful role is to organize supplied project material into a reviewable decision memo before anyone changes the integration.
+
+This article was prepared with AI assistance for an Orkas promotion campaign. The provider, documents and outputs below are fictional teaching examples. They are not an executed Orkas session, a compatibility certification or a report about a real API.
+
+## Start with the material you actually have
+
+Suppose a small project uses the fictional Harbor Export API. Its owner supplies five short notes:
+
+```text
+N1 — Provider notice
+The v1 export endpoint retires on 31 January 2027.
+The v2 endpoint uses next_cursor pagination instead of offset.
+The provider's notice does not describe CSV column changes.
+
+N2 — Desktop export guide, updated 12 October
+The desktop command requests v1 pages with offset and limit=100.
+Its output feeds a customer spreadsheet.
+
+N3 — Nightly sync guide, updated 18 October
+The nightly job uses the v2 endpoint through client version 3.1.
+No recent run log is attached.
+
+N4 — Support note, dated 3 June
+A customer extension may also export records.
+Its owner and deployed version are not recorded.
+
+N5 — Release constraint
+Keep the existing customer CSV columns.
+Do not deploy an integration change before the owner reviews it.
+```
+
+These notes describe different kinds of evidence. N1 establishes the announced retirement and pagination change. N2 describes a specific consumer. N3 documents an intended configuration, without proving the deployed job uses it. N4 establishes an unanswered question. N5 limits the acceptable outcome.
+
+The date on N3 makes it newer than N2, but it does not make it evidence about the desktop command. Likewise, silence about CSV columns does not establish that v2 preserves them. Keeping those distinctions prevents a tidy summary from becoming a misleading one.
+
+## Ask for a decision artifact before a patch
+
+Place the relevant notes in the project and give Commander a bounded request. For example:
+
+> Using only N1–N5, prepare a migration decision memo for the project owner. Identify each possible consumer, its documented API version and the evidence still missing. Separate facts from recommendations. Include a proposed priority order and a short owner-facing decision. Preserve the CSV constraint. Do not edit code, install dependencies, contact customers or deploy anything. If a conclusion needs runtime evidence, say what is missing instead of inferring success from a guide.
+
+The instruction defines the output and the current scope. It does not pretend that the application can discover every integration from five notes. If research or document specialists are available, Commander can coordinate those parts of the work; which tools and sources they can use depends on the configured setup and granted access.
+
+For this request, collecting unrelated product features adds little. A specialist should be able to return its findings with the note identifiers that support them. Commander can then carry those references into one coherent memo.
+
+## Inspect the consumer inventory
+
+An illustrative inventory from that request would read as follows:
+
+- **Desktop command:** Documented as using v1 with offset pagination, supported by N2. It is directly affected by the retirement announced in N1. Current deployed behavior and v2 CSV compatibility remain unverified.
+- **Nightly job:** Documented as using v2 through client 3.1, supported by N3. The notes do not establish a v1 dependency here. They also do not establish that the deployed job matches the guide or that recent runs completed.
+- **Customer extension:** A possible consumer mentioned in N4. Its owner, version and current use are unknown. It cannot be marked migrated, unaffected or abandoned from these inputs.
+
+This inventory has three entries, not three confirmed failures. Only the desktop command has a documented v1 dependency. The extension still matters because it could otherwise disappear from the migration discussion.
+
+## Read the complete owner-facing memo
+
+The result should contain an actual decision draft, not just a list of filenames to create. Here is one possible output:
+
+> **Decision requested:** Approve a focused investigation of the desktop export path and assign an owner to identify the customer extension. Do not approve deployment from the supplied notes alone.
+>
+> **Documented exposure:** N2 describes the desktop command using the v1 endpoint, which N1 says will retire on 31 January 2027. The change from offset to cursor pagination means the current documented request pattern cannot simply be assumed compatible with v2.
+>
+> **Priority:** Address the desktop command first because its v1 dependency is explicit and its CSV reaches a customer spreadsheet. In parallel, identify the extension owner and determine whether that consumer still exists. Confirm that the nightly job's deployed configuration matches N3 before removing it from the migration inventory.
+>
+> **Constraint:** Preserve the customer CSV columns required by N5. The provider notice is silent about column compatibility, so that condition remains open rather than satisfied.
+>
+> **Next evidence:** Obtain the desktop request and response shape, a recent nightly run record, and the extension's owner and version. After those facts are available, prepare a separately scoped implementation proposal for owner review. No code or deployment change is approved by this memo.
+
+Each recommendation has a reason. The priority is based on a documented dependency and a known downstream consumer, rather than an invented severity score. The open questions are concrete enough for an owner to assign without treating every unknown as a blocker for every other task.
+
+## Keep the evidence boundary visible when the work continues
+
+When new information arrives, update the affected entry and its supporting reference. A successful nightly run would change the evidence for that job; it would not prove the desktop command or extension safe. A sample v2 CSV would help compare columns; it would not by itself approve a deployment.
+
+Orkas keeps project context and working files together for this kind of continuation. Local-first storage describes the default workspace location, not a guarantee that a model request stays on the device: selected model providers, connected tools and enabled cloud services have their own data paths. Share only the material those services are permitted to process. The core desktop app is free; model usage and optional services can cost extra. The [public source repository](https://github.com/Orkas-AI/Orkas) is available for inspection.
+
+A useful maintenance memo makes the next decision smaller. Here, the owner can see the documented v1 dependency, the unverified v2 deployment and the unidentified extension separately. That is enough to organize the next work without turning incomplete notes into a claim that the migration is finished.
